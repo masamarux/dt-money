@@ -23,6 +23,30 @@
       "category": "Educação",
       "price": 1200,
       "createdAt": "2022-10-10T21:30:03.789Z"
+    },
+    {
+      "description": "Desenvolvimento de app",
+      "category": "Venda",
+      "price": 10000,
+      "type": "income",
+      "createdAt": "2022-10-17T19:37:23.756Z",
+      "id": "GwNjKTY"
+    },
+    {
+      "description": "Coxinha",
+      "category": "Alimentação",
+      "price": 5,
+      "type": "outcome",
+      "createdAt": "2022-10-17T19:41:54.035Z",
+      "id": "eeNvzix"
+    },
+    {
+      "description": "Cupcake",
+      "category": "Alimentação",
+      "price": 5,
+      "type": "outcome",
+      "createdAt": "2022-10-17T19:51:50.596Z",
+      "id": "z7ZQGHT"
     }
   ]
 }
