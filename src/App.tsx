@@ -1,4 +1,5 @@
 import { ThemeProvider } from 'styled-components'
+import { SizesProvider } from './contexts/SizesContext'
 import { TransactionsProvider } from './contexts/TransactionsContext'
 import { Transactions } from './pages/Transactions'
 import { GlobalStyle } from './styles/global'
@@ -11,7 +12,9 @@ export function App() {
       <GlobalStyle />
 
       <TransactionsProvider>
-        <Transactions />
+        <SizesProvider>
+          <Transactions />
+        </SizesProvider>
       </TransactionsProvider>
     </ThemeProvider>
   )

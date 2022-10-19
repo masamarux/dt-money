@@ -19,9 +19,22 @@ interface CreateTransactionInput {
   type: 'income' | 'outcome'
 }
 
+interface FetchTransactionsProps {
+  query?: string
+  page?: number
+}
+
+interface PaginationProps {
+  actualPage: number
+  totalPages: number
+  pages: number[]
+  count: number
+}
+
 interface TransactionContextType {
   transactions: Transaction[]
-  fetchTransactions: (query?: string) => Promise<void>
+  pagination: PaginationProps
+  fetchTransactions: ({ page, query }: FetchTransactionsProps) => Promise<void>
   createTransaction: (data: CreateTransactionInput) => Promise<void>
 }
 
@@ -34,18 +47,47 @@ interface TransactionProviderProps {
 }
 
 export function TransactionsProvider({ children }: TransactionProviderProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>(
+    [] as Transaction[],
+  )
+  const [pagination, setPagination] = useState<PaginationProps>({
+    actualPage: 1,
+    totalPages: 1,
+    pages: [1],
+    count: 0,
+  })
+  const limit = 10
 
-  const fetchTransactions = useCallback(async (query?: string) => {
-    const response = await api.get('/transactions', {
-      params: {
-        _sort: 'createdAt',
-        _order: 'desc',
-        q: query,
-      },
-    })
-    setTransactions(response.data)
-  }, [])
+  const fetchTransactions = useCallback(
+    async ({ query, page }: FetchTransactionsProps = {}) => {
+      const response = await api.get('/transactions', {
+        params: {
+          _sort: 'createdAt',
+          _order: 'desc',
+          q: query,
+          _page: page || 1,
+          _limit: limit,
+        },
+      })
+
+      const totalPages = Math.ceil(
+        Number(response.headers['x-total-count']) / limit,
+      )
+
+      const pages = [...Array(totalPages).keys()].map((x) => ++x)
+
+      const paginationObj = {
+        actualPage: page || 1,
+        totalPages,
+        pages,
+        count: Number(response.headers['x-total-count']),
+      }
+
+      setPagination(paginationObj)
+      setTransactions(response.data)
+    },
+    [],
+  )
 
   const createTransaction = useCallback(
     async (data: CreateTransactionInput) => {
@@ -59,9 +101,23 @@ export function TransactionsProvider({ children }: TransactionProviderProps) {
         createdAt: new Date(),
       })
 
+      const totalPages = Math.ceil(
+        Number(response.headers['x-total-count']) / limit,
+      )
+
+      const pages = [...Array(totalPages).keys()].map((x) => ++x)
+
+      const paginationObj = {
+        actualPage: pagination.actualPage || 1,
+        totalPages,
+        pages,
+        count: Number(response.headers['x-total-count']),
+      }
+
+      setPagination(paginationObj)
       setTransactions((prevState) => [response.data, ...prevState])
     },
-    [],
+    [pagination],
   )
 
   useEffect(() => {
@@ -72,6 +128,7 @@ export function TransactionsProvider({ children }: TransactionProviderProps) {
     <TransactionContext.Provider
       value={{
         transactions,
+        pagination,
         fetchTransactions,
         createTransaction,
       }}

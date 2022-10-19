@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 
 export const Overlay = styled(Dialog.Overlay)`
+  z-index: 998;
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -11,13 +12,14 @@ export const Overlay = styled(Dialog.Overlay)`
 `
 
 export const Content = styled(Dialog.Content)`
+  z-index: 999;
   min-width: 32rem;
   border-radius: 6px;
   padding: 2.5rem 3rem;
   background: ${(props) => props.theme['gray-800']};
   position: fixed;
 
-  top: 50%;
+  bottom: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
@@ -63,6 +65,26 @@ export const Content = styled(Dialog.Content)`
       }
     }
   }
+
+  @media (max-width: 878px) {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    padding: 1rem 1rem 0.5rem;
+
+    width: 100%;
+    min-width: 0;
+
+    border-top-left-radius: 1.25rem;
+    border-top-right-radius: 1.25rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+`
+
+export const DialogTitle = styled(Dialog.Title)`
+  line-height: 1.6;
 `
 
 export const CloseButton = styled(Dialog.Close)`

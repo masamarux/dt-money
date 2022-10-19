@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SearchFormContainer } from './styles'
 import { TransactionContext } from '../../../../contexts/TransactionsContext'
 import { useContextSelector } from 'use-context-selector'
+import { SizesContext } from '../../../../contexts/SizesContext'
 
 const searchFormSchema = z.object({
   query: z.string(),
@@ -13,6 +14,7 @@ const searchFormSchema = z.object({
 type SearchFormInputs = z.infer<typeof searchFormSchema>
 
 export function SearchForm() {
+  const width = useContextSelector(SizesContext, (context) => context.width)
   const fetchTransactions = useContextSelector(
     TransactionContext,
     (context) => context.fetchTransactions,
@@ -26,7 +28,7 @@ export function SearchForm() {
   })
 
   async function handleSearchTransactions(data: SearchFormInputs) {
-    await fetchTransactions(data.query)
+    await fetchTransactions({ query: data.query })
   }
 
   return (
@@ -38,8 +40,8 @@ export function SearchForm() {
       />
 
       <button type="submit" disabled={isSubmitting}>
-        <MagnifyingGlass size={20} />
-        Buscar
+        <MagnifyingGlass size={20} weight="bold" />
+        {width > 878 && 'Buscar'}
       </button>
     </SearchFormContainer>
   )

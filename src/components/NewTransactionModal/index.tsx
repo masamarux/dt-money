@@ -12,6 +12,7 @@ import {
   CloseButton,
   TransactionType,
   TransactionTypeButton,
+  DialogTitle,
 } from './styles'
 
 const newTransactionFormSchema = z.object({
@@ -55,7 +56,7 @@ export function NewTransactionModal() {
     <Dialog.Portal>
       <Overlay />
       <Content>
-        <Dialog.Title>Nova transação</Dialog.Title>
+        <DialogTitle>Nova transação</DialogTitle>
 
         <CloseButton>
           <X size={24} />
