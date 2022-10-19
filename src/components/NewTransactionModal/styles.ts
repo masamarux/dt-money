@@ -21,7 +21,7 @@ export const Content = styled(Dialog.Content)`
 
   bottom: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, +50%);
 
   form {
     margin-top: 2rem;

@@ -101,23 +101,9 @@ export function TransactionsProvider({ children }: TransactionProviderProps) {
         createdAt: new Date(),
       })
 
-      const totalPages = Math.ceil(
-        Number(response.headers['x-total-count']) / limit,
-      )
-
-      const pages = [...Array(totalPages).keys()].map((x) => ++x)
-
-      const paginationObj = {
-        actualPage: pagination.actualPage || 1,
-        totalPages,
-        pages,
-        count: Number(response.headers['x-total-count']),
-      }
-
-      setPagination(paginationObj)
       setTransactions((prevState) => [response.data, ...prevState])
     },
-    [pagination],
+    [],
   )
 
   useEffect(() => {
